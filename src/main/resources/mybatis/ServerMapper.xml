@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Octagon Plugin Development: Development plugin for Octagon application.
+ Copyright (C) 2021-2022 the original author or authors.
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; version 2
+ of the License only.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.nanoboot.octagon.plugin.development.persistence.impl.mappers.ServerMapper">
+
+    <resultMap id="serverResultMap" type="org.nanoboot.octagon.plugin.development.classes.Server">
+        <id property="id" column="ID" typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+        <result property="name" column="NAME"/>
+        <result property="ports" column="PORTS"/>
+        <result property="category" column="CATEGORY"/>
+        <result property="note" column="NOTE"/>
+    </resultMap>
+
+    <sql id="serverColumns">
+        "ID", "NAME", "PORTS", "CATEGORY", "NOTE"
+    </sql>
+
+    <insert id="create" parameterType="org.nanoboot.octagon.plugin.development.classes.Server">
+        INSERT INTO "SERVER" (<include refid="serverColumns"/>)
+        VALUES
+        (
+        #{id},
+        #{name},
+        #{ports},
+        #{category},
+        #{note}
+        )
+    </insert>
+
+    <select id="read" parameterType="String" resultMap="serverResultMap">
+        SELECT
+        <include refid="serverColumns"/>
+        FROM "SERVER"
+        WHERE "ID" = #{id}
+    </select>
+
+    <update id="update" parameterType="org.nanoboot.octagon.plugin.development.classes.Server">
+        UPDATE "SERVER" SET
+        "NAME" = #{name},
+        "PORTS" = #{ports},
+        "CATEGORY" = #{category},
+        "NOTE" = #{note}
+
+        WHERE "ID" = #{id}
+    </update>
+
+    <delete id="delete" parameterType="String">
+            DELETE FROM "SERVER"
+            WHERE "ID" = #{id}
+    </delete>
+
+    <select id="list" parameterType="String" resultMap="serverResultMap">
+        SELECT
+        <include refid="serverColumns"/>
+        FROM "SERVER"
+        WHERE ${value}
+    </select>
+
+
+    <!-- Labels -->
+    <resultMap id="labelResultMap" type="org.nanoboot.octagon.entity.classes.EntityLabel">
+        <id property="id" column="ID"/>
+        <result property="label" column="NAME"/>
+    </resultMap>
+
+    <sql id="labelColumns">
+        "ID", "NAME"
+    </sql>
+
+    <select id="getLabel" parameterType="String" resultType="String">
+        SELECT
+            "NAME"
+        FROM "SERVER"
+        WHERE "ID" = #{id}
+    </select>
+    <select id="getLabels" resultMap="labelResultMap">
+        SELECT
+        <include refid="labelColumns"/>
+        FROM "SERVER"
+    </select>
+</mapper>

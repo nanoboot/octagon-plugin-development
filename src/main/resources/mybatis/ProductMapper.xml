@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Octagon Plugin Development: Development plugin for Octagon application.
+ Copyright (C) 2021-2022 the original author or authors.
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; version 2
+ of the License only.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.nanoboot.octagon.plugin.development.persistence.impl.mappers.ProductMapper">
+
+    <resultMap id="productResultMap" type="org.nanoboot.octagon.plugin.development.classes.Product">
+        <id property="id" column="ID"
+            typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+        <result property="productNumber" column="PRODUCT_NUMBER"/>
+        <result property="applicationSymbolicIdentifier" column="APPLICATION_SYMBOLIC_IDENTIFIER"/>
+        <result property="productCode" column="PRODUCT_CODE"/>
+        <result property="name" column="NAME"/>
+        <result property="productGroupId" column="PRODUCT_GROUP_ID"
+                typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+        <result property="status" column="STATUS"
+                typeHandler="org.nanoboot.octagon.plugin.task.persistence.impl.typehandlers.StatusTypeHandler"/>
+        <result property="resolution" column="RESOLUTION"
+                typeHandler="org.nanoboot.octagon.plugin.task.persistence.impl.typehandlers.ResolutionTypeHandler"/>
+        <result property="sortkey" column="SORTKEY"/>
+        <result property="description" column="DESCRIPTION"/>
+        <result property="defaultMilestoneId" column="DEFAULT_MILESTONE_ID"
+                typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+        <result property="defaultProjectId" column="DEFAULT_PROJECT_ID"
+                typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+    </resultMap>
+
+    <sql id="productColumns">
+        "ID", "PRODUCT_NUMBER", "APPLICATION_SYMBOLIC_IDENTIFIER", "PRODUCT_CODE", "NAME", "PRODUCT_GROUP_ID", "STATUS", "RESOLUTION",
+        "SORTKEY", "DESCRIPTION", "DEFAULT_MILESTONE_ID", "DEFAULT_PROJECT_ID"
+    </sql>
+
+    <insert id="create" parameterType="org.nanoboot.octagon.plugin.development.classes.Product">
+        INSERT INTO "PRODUCT" (<include refid="productColumns"/>)
+        VALUES
+        (
+        #{id},
+        #{productNumber},
+        #{applicationSymbolicIdentifier},
+        #{productCode},
+        #{name},
+        #{productGroupId},
+        #{status},
+        #{resolution},
+        #{sortkey},
+        #{description},
+        #{defaultMilestoneId},
+        #{defaultProjectId}
+        )
+    </insert>
+
+    <select id="read" parameterType="String" resultMap="productResultMap">
+        SELECT
+        <include refid="productColumns"/>
+        FROM "PRODUCT"
+        WHERE "ID" = #{id}
+    </select>
+
+    <update id="update" parameterType="org.nanoboot.octagon.plugin.development.classes.Product">
+        UPDATE "PRODUCT" SET
+        "ID"=#{id},
+        "PRODUCT_NUMBER"=#{productNumber},
+        "APPLICATION_SYMBOLIC_IDENTIFIER"=#{applicationSymbolicIdentifier},
+        "PRODUCT_CODE"=#{productCode},
+        "NAME"=#{name},
+        "PRODUCT_GROUP_ID"=#{productGroupId},
+        "STATUS"=#{status},
+        "RESOLUTION"=#{resolution},
+        "SORTKEY"=#{sortkey},
+        "DESCRIPTION"=#{description},
+        "DEFAULT_MILESTONE_ID"=#{defaultMilestoneId},
+        "DEFAULT_PROJECT_ID"=#{defaultProjectId}
+
+        WHERE "ID" = #{id}
+    </update>
+
+    <delete id="delete" parameterType="String">
+            DELETE FROM "PRODUCT"
+            WHERE "ID" = #{id}
+    </delete>
+
+    <select id="list" parameterType="String" resultMap="productResultMap">
+        SELECT
+        <include refid="productColumns"/>
+        FROM "PRODUCT"
+        WHERE ${value}
+    </select>
+
+
+    <!-- Labels -->
+    <resultMap id="labelResultMap" type="org.nanoboot.octagon.entity.classes.EntityLabel">
+        <id property="id" column="ID"/>
+        <result property="label" column="NAME"/>
+    </resultMap>
+
+    <sql id="labelColumns">
+        "ID", "NAME"
+    </sql>
+
+    <select id="getLabel" parameterType="String" resultType="String">
+        SELECT
+            "NAME"
+        FROM "PRODUCT"
+        WHERE "ID" = #{id}
+    </select>
+    <select id="getLabels" resultMap="labelResultMap">
+        SELECT
+        <include refid="labelColumns"/>
+        FROM "PRODUCT"
+    </select>
+</mapper>

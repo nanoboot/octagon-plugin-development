@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Octagon Plugin Development: Development plugin for Octagon application.
+ Copyright (C) 2021-2022 the original author or authors.
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; version 2
+ of the License only.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.nanoboot.octagon.plugin.development.persistence.impl.mappers.GitlabRepoMapper">
+
+    <resultMap id="gitlabRepoResultMap" type="org.nanoboot.octagon.plugin.development.classes.GitlabRepo">
+        <id property="id" column="ID" typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+        <result property="productId" column="PRODUCT_ID" typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+        <result property="name" column="NAME"/>
+        <result property="url" column="URL"/>
+        <result property="type" column="TYPE" typeHandler="org.nanoboot.octagon.plugin.development.persistence.impl.typehandlers.GitlabRepoTypeTypeHandler"/>
+        <result property="status" column="STATUS" typeHandler="org.nanoboot.octagon.plugin.development.persistence.impl.typehandlers.GitlabRepoStatusTypeHandler"/>
+        <result property="gitStandardization" column="GIT_STANDARDIZATION" typeHandler="org.nanoboot.octagon.entity.typehandlers.BooleanTypeHandler"/>
+        <result property="doesDocRepoExist" column="DOES_DOC_REPO_EXIST" typeHandler="org.nanoboot.octagon.entity.typehandlers.BooleanTypeHandler"/>
+
+    </resultMap>
+
+    <sql id="gitlabRepoColumns">
+        "ID", "PRODUCT_ID", "NAME", "URL", "TYPE", "STATUS", "GIT_STANDARDIZATION", "DOES_DOC_REPO_EXIST"
+    </sql>
+
+    <insert id="create" parameterType="org.nanoboot.octagon.plugin.development.classes.GitlabRepo">
+        INSERT INTO "GITLAB_REPO" (<include refid="gitlabRepoColumns"/>)
+        VALUES
+        (
+        #{id},
+        #{productId},
+        #{name},
+        #{url},
+        #{type},
+        #{status},
+        #{gitStandardization},
+        #{doesDocRepoExist}
+        )
+    </insert>
+
+    <select id="read" parameterType="String" resultMap="gitlabRepoResultMap">
+        SELECT
+        <include refid="gitlabRepoColumns"/>
+        FROM "GITLAB_REPO"
+        WHERE "ID" = #{id}
+    </select>
+
+    <update id="update" parameterType="org.nanoboot.octagon.plugin.development.classes.GitlabRepo">
+        UPDATE "GITLAB_REPO" SET
+        "PRODUCT_ID" = #{productId},
+        "NAME" = #{name},
+        "URL" = #{url},
+
+        "TYPE" = #{type},
+        "STATUS" = #{status},
+        "GIT_STANDARDIZATION" = #{gitStandardization},
+        "DOES_DOC_REPO_EXIST" = #{doesDocRepoExist}
+
+        WHERE "ID" = #{id}
+    </update>
+
+    <delete id="delete" parameterType="String">
+            DELETE FROM "GITLAB_REPO"
+            WHERE "ID" = #{id}
+    </delete>
+
+    <select id="list" parameterType="String" resultMap="gitlabRepoResultMap">
+        SELECT
+        <include refid="gitlabRepoColumns"/>
+        FROM "GITLAB_REPO"
+        WHERE ${value}
+    </select>
+
+
+
+    <!-- Labels -->
+    <resultMap id="labelResultMap" type="org.nanoboot.octagon.entity.classes.EntityLabel">
+        <id property="id" column="ID"/>
+        <result property="label" column="NAME"/>
+    </resultMap>
+
+    <sql id="labelColumns">
+        "ID", "NAME"
+    </sql>
+
+    <select id="getLabel" parameterType="String" resultType="String">
+        SELECT
+            "NAME"
+        FROM "GITLAB_REPO"
+        WHERE "ID" = #{id}
+    </select>
+    <select id="getLabels" resultMap="labelResultMap">
+        SELECT
+        <include refid="labelColumns"/>
+        FROM "GITLAB_REPO"
+    </select>
+</mapper>

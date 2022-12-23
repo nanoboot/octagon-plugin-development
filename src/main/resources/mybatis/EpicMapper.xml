@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Octagon Plugin Development: Development plugin for Octagon application.
+ Copyright (C) 2021-2022 the original author or authors.
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; version 2
+ of the License only.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.nanoboot.octagon.plugin.development.persistence.impl.mappers.EpicMapper">
+
+    <resultMap id="epicResultMap" type="org.nanoboot.octagon.plugin.development.classes.Epic">
+        <id property="id" column="ID"
+            typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+        <result property="name" column="NAME"/>
+        <result property="group" column="GROUP"/>
+        <result property="since" column="SINCE"
+                typeHandler="org.nanoboot.octagon.entity.typehandlers.LocalDateTypeHandler"/>
+        <result property="deadline" column="DEADLINE"
+                typeHandler="org.nanoboot.octagon.entity.typehandlers.LocalDateTypeHandler"/>
+        <result property="status" column="STATUS"
+                typeHandler="org.nanoboot.octagon.plugin.task.persistence.impl.typehandlers.StatusTypeHandler"/>
+        <result property="resolution" column="RESOLUTION"
+                typeHandler="org.nanoboot.octagon.plugin.task.persistence.impl.typehandlers.ResolutionTypeHandler"/>
+        <result property="resolutionComment" column="RESOLUTION_COMMENT" />
+        <result property="sortkey" column="SORTKEY"/>
+        <result property="importance" column="IMPORTANCE"
+                typeHandler="org.nanoboot.octagon.plugin.task.persistence.impl.typehandlers.ImportanceTypeHandler"/>
+        <result property="size" column="SIZE"
+                typeHandler="org.nanoboot.octagon.plugin.task.persistence.impl.typehandlers.SizeTypeHandler"/>
+        <result property="note" column="NOTE"/>
+        <result property="object" column="OBJECT"/>
+        <result property="reminderType" column="REMINDER_TYPE"
+                typeHandler="org.nanoboot.octagon.plugin.person.persistence.impl.typehandlers.ReminderTypeTypeHandler"/>
+        <result property="todo" column="TODO"/>
+        <result property="asap" column="ASAP"
+                typeHandler="org.nanoboot.octagon.entity.typehandlers.BooleanTypeHandler"/>
+        <result property="repeatEveryXDays" column="REPEAT_EVERY_X_DAYS" />
+        <result property="progressEstimation" column="PROGRESS_ESTIMATION"/>
+        <result property="parentId" column="PARENT_ID"
+                typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+        <result property="assignee" column="ASSIGNEE"
+                typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+        <result property="reporter" column="REPORTER"
+                typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+        <result property="projectId" column="PROJECT_ID"
+                typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+        <result property="numberPerProject" column="NUMBER_PER_PROJECT"/>
+        <result property="alias" column="ALIAS"/>
+        <result property="productId" column="PRODUCT_ID"
+                typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+        <result property="componentId" column="COMPONENT_ID"
+                typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+        <result property="moduleId" column="MODULE_ID"
+                typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+        <result property="versionId" column="VERSION_ID"
+                typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+        <result property="targetMilestoneId" column="TARGET_MILESTONE_ID"
+                typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+        <result property="budgetYear" column="BUDGET_YEAR" />
+    </resultMap>
+
+    <sql id="epicColumns">
+        "ID", "NAME", "GROUP", "SINCE", "DEADLINE", "STATUS", "RESOLUTION", "RESOLUTION_COMMENT",  "SORTKEY",
+        "IMPORTANCE",  "SIZE",  "NOTE",  "OBJECT",  "REMINDER_TYPE",  "TODO",  "ASAP",  "REPEAT_EVERY_X_DAYS", "PROGRESS_ESTIMATION",  "PARENT_ID",
+        "ASSIGNEE", "REPORTER", 
+        "PROJECT_ID", "NUMBER_PER_PROJECT", "ALIAS", "PRODUCT_ID", "COMPONENT_ID", "MODULE_ID", "VERSION_ID", "TARGET_MILESTONE_ID", "BUDGET_YEAR"
+    </sql>
+
+    <insert id="create" parameterType="org.nanoboot.octagon.plugin.development.classes.Epic">
+        INSERT INTO "EPIC" (<include refid="epicColumns"/>)
+        VALUES
+        (
+        #{id},
+        #{name},
+        #{group},
+        #{since,javaType=org.nanoboot.powerframework.time.moment.LocalDate,jdbcType=VARCHAR,typeHandler=org.nanoboot.octagon.entity.typehandlers.LocalDateTypeHandler},
+        #{deadline,javaType=org.nanoboot.powerframework.time.moment.LocalDate,jdbcType=VARCHAR,typeHandler=org.nanoboot.octagon.entity.typehandlers.LocalDateTypeHandler},
+        #{status,javaType=org.nanoboot.powerframework.time.moment.LocalDate,jdbcType=VARCHAR,typeHandler=org.nanoboot.octagon.plugin.task.persistence.impl.typehandlers.StatusTypeHandler},
+        #{resolution,javaType=org.nanoboot.powerframework.time.moment.LocalDate,jdbcType=VARCHAR,typeHandler=org.nanoboot.octagon.plugin.task.persistence.impl.typehandlers.ResolutionTypeHandler},
+        #{resolutionComment},
+        #{sortkey},
+        #{importance,javaType=org.nanoboot.powerframework.time.moment.LocalDate,jdbcType=VARCHAR,typeHandler=org.nanoboot.octagon.plugin.task.persistence.impl.typehandlers.ImportanceTypeHandler},
+        #{size,javaType=org.nanoboot.powerframework.time.moment.LocalDate,jdbcType=VARCHAR,typeHandler=org.nanoboot.octagon.plugin.task.persistence.impl.typehandlers.SizeTypeHandler},
+        #{note},
+        #{object},
+        #{reminderType,javaType=org.nanoboot.powerframework.time.moment.LocalDate,jdbcType=VARCHAR,typeHandler=org.nanoboot.octagon.plugin.person.persistence.impl.typehandlers.ReminderTypeTypeHandler},
+        #{todo},
+        #{asap,javaType=org.nanoboot.powerframework.time.moment.LocalDate,jdbcType=VARCHAR,typeHandler=org.nanoboot.octagon.entity.typehandlers.BooleanTypeHandler},
+        #{repeatEveryXDays},
+        #{progressEstimation},
+        #{parentId},
+        #{assignee},
+        #{reporter},
+        #{projectId},
+        #{numberPerProject},
+        #{alias},
+        #{productId},
+        #{componentId},
+        #{moduleId},
+        #{versionId},
+        #{targetMilestoneId},
+        #{budgetYear}
+        )
+    </insert>
+
+    <select id="read" parameterType="String" resultMap="epicResultMap">
+        SELECT
+        <include refid="epicColumns"/>
+        FROM "EPIC"
+        WHERE "ID" = #{id}
+    </select>
+
+    <update id="update" parameterType="org.nanoboot.octagon.plugin.development.classes.Epic">
+        UPDATE "EPIC" SET
+        "NAME" = #{name},
+        "GROUP" = #{group},
+        "SINCE" = #{since},
+        "DEADLINE" = #{deadline},
+        "STATUS" = #{status},
+        "RESOLUTION" = #{resolution},
+        "RESOLUTION_COMMENT" = #{resolutionComment},
+        "SORTKEY" = #{sortkey},
+        "IMPORTANCE" = #{importance},
+        "SIZE" = #{size},
+        "NOTE" = #{note},
+        "OBJECT" = #{object},
+        "REMINDER_TYPE" = #{reminderType},
+        "TODO" = #{todo},
+        "ASAP" = #{asap},
+        "REPEAT_EVERY_X_DAYS" = #{repeatEveryXDays},
+        "PROGRESS_ESTIMATION" = #{progressEstimation},
+        "PARENT_ID" = #{parentId},
+        "ASSIGNEE" = #{assignee},
+        "REPORTER" = #{reporter},
+        "PROJECT_ID" = #{projectId},
+        "NUMBER_PER_PROJECT" = #{numberPerProject},
+        "ALIAS" = #{alias},
+        "PRODUCT_ID" = #{productId},
+        "COMPONENT_ID" = #{componentId},
+        "MODULE_ID" = #{moduleId},
+        "VERSION_ID" = #{versionId},
+        "TARGET_MILESTONE_ID" = #{targetMilestoneId},
+        "BUDGET_YEAR" = #{budgetYear}
+        WHERE "ID" = #{id}
+    </update>
+
+    <delete id="delete" parameterType="String">
+            DELETE FROM "EPIC"
+            WHERE "ID" = #{id}
+    </delete>
+
+    <select id="list" parameterType="String" resultMap="epicResultMap">
+        SELECT
+        <include refid="epicColumns"/>
+        FROM "EPIC"
+        WHERE ${value}
+    </select>
+
+
+
+    <!-- Labels -->
+    <resultMap id="labelResultMap" type="org.nanoboot.octagon.entity.classes.EntityLabel">
+        <id property="id" column="ID"/>
+        <result property="label" column="NAME"/>
+    </resultMap>
+
+    <sql id="labelColumns">
+        "ID", "NAME"
+    </sql>
+
+    <select id="getLabel" parameterType="String" resultType="String">
+        SELECT
+            "NAME"
+        FROM "EPIC"
+        WHERE "ID" = #{id}
+    </select>
+    <select id="getLabels" resultMap="labelResultMap">
+        SELECT
+        <include refid="labelColumns"/>
+        FROM "EPIC"
+    </select>
+</mapper>

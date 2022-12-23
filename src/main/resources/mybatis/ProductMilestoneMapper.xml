@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Octagon Plugin Development: Development plugin for Octagon application.
+ Copyright (C) 2021-2022 the original author or authors.
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; version 2
+ of the License only.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.nanoboot.octagon.plugin.development.persistence.impl.mappers.ProductMilestoneMapper">
+
+    <resultMap id="productMilestoneResultMap" type="org.nanoboot.octagon.plugin.development.classes.ProductMilestone">
+        <id property="id" column="ID" typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+        <result property="productId" column="PRODUCT_ID" typeHandler="org.nanoboot.octagon.entity.typehandlers.UUIDTypeHandler"/>
+        <result property="name" column="NAME"/>
+        <result property="description" column="DESCRIPTION"/>
+        <result property="retired" column="RETIRED" typeHandler="org.nanoboot.octagon.entity.typehandlers.BooleanTypeHandler" />
+    </resultMap>
+
+    <sql id="productMilestoneColumns">
+        "ID", "PRODUCT_ID", "NAME", "DESCRIPTION", "RETIRED"
+    </sql>
+
+    <insert id="create" parameterType="org.nanoboot.octagon.plugin.development.classes.ProductMilestone">
+        INSERT INTO "PRODUCT_MILESTONE" (<include refid="productMilestoneColumns"/>)
+        VALUES
+        (
+        #{id},
+        #{productId},
+        #{name},
+        #{description},
+        #{retired}
+        )
+    </insert>
+
+    <select id="read" parameterType="String" resultMap="productMilestoneResultMap">
+        SELECT
+        <include refid="productMilestoneColumns"/>
+        FROM "PRODUCT_MILESTONE"
+        WHERE "ID" = #{id}
+    </select>
+
+    <update id="update" parameterType="org.nanoboot.octagon.plugin.development.classes.ProductMilestone">
+        UPDATE "PRODUCT_MILESTONE" SET
+        "PRODUCT_ID" = #{productId},
+        "NAME" = #{name},
+        "DESCRIPTION" = #{description},
+        "RETIRED" = #{retired}
+
+        WHERE "ID" = #{id}
+    </update>
+
+    <delete id="delete" parameterType="String">
+            DELETE FROM "PRODUCT_MILESTONE"
+            WHERE "ID" = #{id}
+    </delete>
+
+    <select id="list" parameterType="String" resultMap="productMilestoneResultMap">
+        SELECT
+        <include refid="productMilestoneColumns"/>
+        FROM "PRODUCT_MILESTONE"
+        WHERE ${value}
+    </select>
+
+
+    <!-- Labels -->
+    <resultMap id="labelResultMap" type="org.nanoboot.octagon.entity.classes.EntityLabel">
+        <id property="id" column="ID"/>
+        <result property="label" column="NAME"/>
+    </resultMap>
+
+    <sql id="labelColumns">
+        "ID", "NAME"
+    </sql>
+
+    <select id="getLabel" parameterType="String" resultType="String">
+        SELECT
+            "NAME"
+        FROM "PRODUCT_MILESTONE"
+        WHERE "ID" = #{id}
+    </select>
+    <select id="getLabels" resultMap="labelResultMap">
+        SELECT
+        <include refid="labelColumns"/>
+        FROM "PRODUCT_MILESTONE"
+    </select>
+</mapper>
