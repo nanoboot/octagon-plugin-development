@@ -47,7 +47,7 @@ import org.nanoboot.octagon.plugin.actionlog.classes.ActionLog;
 @Data()
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public sealed abstract class AbstractDevelopmentTask extends AbstractTask permits Epic, Story, DevTask, DevSubTask, Bug, Enhancement, Incident, NewFeature, Problem, Proposal, SimpleTask {
+public sealed abstract class AbstractDevelopmentTask extends AbstractTask permits Epic, Story, DevTask, DevSubTask, Ticket, SimpleTask {
 
     private static final org.apache.logging.log4j.Logger LOG = LogManager.getLogger(AbstractDevelopmentTask.class);
     private UUID projectId;

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // Octagon Plugin Development: Development plugin for Octagon application.
-// Copyright (C) 2021-2022 the original author or authors.
+// Copyright (C) 2021-2023 the original author or authors.
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ import java.util.List;
  * @author <a href="mailto:robertvokac@nanoboot.org">Robert Vokac</a>
  * @since 0.1.0
  */
-public final class Bug extends AbstractDevelopmentTask {
+public final class Ticket extends AbstractDevelopmentTask {
    private static List<EntityAttribute> SCHEMA;
 
    @Override
@@ -46,7 +46,7 @@ public final class Bug extends AbstractDevelopmentTask {
                String fKName= getForeignKeyNameForParent();
                e.setCustomHumanName(String.valueOf(fKName.charAt(0)).toUpperCase() + fKName.substring(1));
                e.setForeignKey(fKName);
-               e.setNamedList("getBugsForProduct");
+               e.setNamedList("getTicketsForProduct");
                e.setNamedListArgPropertyName("productId");
                break;
             }
@@ -54,14 +54,13 @@ public final class Bug extends AbstractDevelopmentTask {
       }
       return SCHEMA;
    }
-
    public void validateDelete() {
       super.validateDelete();
-      throw new OctagonException(Bug.class.getSimpleName() + " cannot be deleted, because of possible references in Git commit messages.");
+      throw new OctagonException(Ticket.class.getSimpleName() + " cannot be deleted, because once it is created, it must stay there. Another reason is, that there are possible references in Git commit messages.");
    }
    @Override
    String getForeignKeyNameForParent() {
-      return "bug";
+      return "ticket";
    }
    }
 

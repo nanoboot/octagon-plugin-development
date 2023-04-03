@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
-// Octagon Plugin Development: Development plugin for Octagon application.
+// Octagon Plugin Task: Task plugin for Octagon application.
 // Copyright (C) 2021-2022 the original author or authors.
 //
 // This program is free software; you can redistribute it and/or
@@ -17,15 +17,21 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.nanoboot.octagon.plugin.development.persistence.api;
-
-import org.nanoboot.octagon.entity.api.Repository;
-import org.nanoboot.octagon.plugin.development.classes.Enhancement;
+package org.nanoboot.octagon.plugin.development.classes;
 
 /**
  *
  * @author <a href="mailto:robertvokac@nanoboot.org">Robert Vokac</a>
  * @since 0.1.0
  */
-public interface EnhancementRepository extends Repository<Enhancement> {
+public enum TicketType {
+    DEV_TASK, 
+    DEV_SUBTASK,
+    ENHANCEMENT, 
+    INCIDENT,
+    BUG,
+    NEW_FEATURE,
+    PROBLEM,
+    PROPOSAL;
+
 }
